@@ -2,6 +2,7 @@ package project2;
 import java.io.*;
 import java.util.*;
 import java.util.Random;
+import util.*;
 /**
  * Created by Youqiao Ma on 2/19/2017.
  */
@@ -24,7 +25,7 @@ public class Problem1WriteFile {
             OutputStream out1 = new BufferedOutputStream(new FileOutputStream(file1));
 
             for(int i=0; i < MAX_POINTS; i++){
-                out1.write(getPointLine(i+1).getBytes());
+                out1.write(Util.getPointLine(MIN_AXIS, MAX_AXIS).getBytes());
                 if(i != MAX_POINTS-1){
                     out1.write('\n');
                 }
@@ -46,7 +47,7 @@ public class Problem1WriteFile {
             OutputStream out2 = new BufferedOutputStream(new FileOutputStream(file2));
 
             for(int i=0; i < MAX_RECTANGLES; i++){
-                out2.write(getRectangleLine(i+1).getBytes());
+                out2.write(Util.getRectangleLine(i+1,10000, MIN_AXIS, MAX_AXIS).getBytes());
                 if(i != MAX_RECTANGLES-1){
                     out2.write('\n');
                 }
@@ -63,43 +64,5 @@ public class Problem1WriteFile {
         }
     }
 
-    private static String getPointLine(int seed){
-        StringBuilder sb = new StringBuilder();
-        sb.append(getRandomPoint(10000, MIN_AXIS, MAX_AXIS)).append(",");
-        sb.append(getRandomPoint(10000, MIN_AXIS, MAX_AXIS));
-        return "";
-    }
 
-    private static String getRandomPoint(int times, float lowbound, float highbound){
-        float sample;
-        do{
-            sample = ra.nextFloat() * times;
-        }while(sample < lowbound || sample > highbound);
-        return String.format("%.2f", sample);
-    }
-
-    private static String getRectangleLine(int seed){
-        return "";
-    }
-
-    private static String getRectanglePoint(int times, float lowbound, float highbound){
-        float sample;
-        do{
-            sample = ra.nextFloat() * times;
-        }while(sample < lowbound || sample > highbound);
-        return String.format("%.2f", sample);
-    }
-
-    /*
-
-
-    private Class Rectangle(){
-
-
-
-        float vertex = 0;
-        int width;
-        int height;
-    }
-     */
 }
