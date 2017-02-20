@@ -10,6 +10,9 @@ public class Problem1WriteFile {
     private static final int MAX_POINTS = 10000;
     private static final int MAX_RECTANGLES = 10000;
 
+    private static final int MAX_AXIS = 10000;
+    private static final int MIN_AXIS = 1;
+
     private static Random ra = new Random();
 
     public static void main(String[] args){
@@ -62,15 +65,41 @@ public class Problem1WriteFile {
 
     private static String getPointLine(int seed){
         StringBuilder sb = new StringBuilder();
-        sb.append(ra.nextDouble());
+        sb.append(getRandomPoint(10000, MIN_AXIS, MAX_AXIS)).append(",");
+        sb.append(getRandomPoint(10000, MIN_AXIS, MAX_AXIS));
         return "";
     }
 
-    private static float getRandomPoint(){
-        return 0;
+    private static String getRandomPoint(int times, float lowbound, float highbound){
+        float sample;
+        do{
+            sample = ra.nextFloat() * times;
+        }while(sample < lowbound || sample > highbound);
+        return String.format("%.2f", sample);
     }
 
     private static String getRectangleLine(int seed){
         return "";
     }
+
+    private static String getRectanglePoint(int times, float lowbound, float highbound){
+        float sample;
+        do{
+            sample = ra.nextFloat() * times;
+        }while(sample < lowbound || sample > highbound);
+        return String.format("%.2f", sample);
+    }
+
+    /*
+
+
+    private Class Rectangle(){
+
+
+
+        float vertex = 0;
+        int width;
+        int height;
+    }
+     */
 }
