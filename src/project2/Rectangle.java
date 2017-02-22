@@ -25,34 +25,19 @@ public class Rectangle {
         Float y = new Float(y_axis);
         area.add(calArea(x, y));
         Float rx = new Float(x_axis + width);
-        Float ry = new Float(y_axis - height);
         String righttop = calArea(rx, y);
-        String leftbottom = calArea(x, ry);
-        String rightbottom = calArea(rx, ry);
         if(!area.contains(righttop)){
             area.add(righttop);
-        }
-        if(!area.contains(leftbottom)){
-            area.add(leftbottom);
-        }
-        if(!area.contains(rightbottom)){
-            area.add(rightbottom);
         }
     }
 
     private String calArea(Float x, Float y){
         StringBuilder sb = new StringBuilder();
         if(x != 10000){
-            x = x/1000;
+            x = x/10;
             sb.append(x.intValue());
         }else{
-            sb.append("9");
-        }
-        if(y != 10000){
-            y = y/1000;
-            sb.append(y.intValue());
-        }else{
-            sb.append("9");
+            sb.append("999");
         }
         return sb.toString();
     }

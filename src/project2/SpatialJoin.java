@@ -31,15 +31,40 @@ public class SpatialJoin {
 
         private PRKey prk = new PRKey();
 
+        private String window;
+
         private IntWritable id = new IntWritable();
         private Text text = new Text();
+
+        protected void setup(Context context) throws IOException, InterruptedException {
+            Configuration conf = context.getConfiguration();
+            try{
+                window = conf.get("window", "null");
+            }catch(Exception e){
+                window = "";
+            }
+        }
 
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             // Consider to read each line first by using '\n'
             Point point = new Point(value.toString());
-            text.set(point.toString());
-            prk = new PRKey(Integer.parseInt(point.location), 1);
-            context.write(prk, text);
+            if(window.equals("") || window.equals("null")){
+                text.set(point.toString());
+                prk = new PRKey(Integer.parseInt(point.location), 1);
+                context.write(prk, text);
+            }else{
+                String[] windows = window.split(",");
+                int width = Integer.parseInt(windows[2]) - Integer.parseInt(windows[0]);
+                int height = Integer.parseInt(windows[3]) - Integer.parseInt(windows[1]);
+                Rectangle rect = new Rectangle("Window"+","+ windows[0] + "," + windows[3] + "," + width  + "," + height);
+
+                if(rect.isInside(point)){
+                    text.set(point.toString());
+                    prk = new PRKey(Integer.parseInt(point.location), 1);
+                    context.write(prk, text);
+                }
+            }
+
         }
     }
 
@@ -130,9 +155,12 @@ public class SpatialJoin {
 
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
-        if (args.length != 3) {
+        if (args.length != 3 && args.length != 4) {
             System.err.println("Usage: Spatial Join <HDFS input file1> <HDFS input file2> <HDFS output file>");
             System.exit(2);
+        }
+        if(args.length == 4){
+            conf.set("window",args[3]);
         }
         Job job = new Job(conf, "SpatialJoin");
         job.setJarByClass(SpatialJoin.class);

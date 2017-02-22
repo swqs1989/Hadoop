@@ -19,16 +19,10 @@ public class Point {
         Float yn = new Float(y);
         StringBuilder sb = new StringBuilder();
         if(xn != 10000){
-            xn = xn/1000;
+            xn = xn/10;
             sb.append(xn.intValue());
         }else{
-            sb.append("9");
-        }
-        if(yn != 10000){
-            yn = yn/1000;
-            sb.append(yn.intValue());
-        }else{
-            sb.append("9");
+            sb.append("999");
         }
         location = sb.toString();
     }
