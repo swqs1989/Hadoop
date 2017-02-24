@@ -76,7 +76,7 @@ public class JSONReader_rep extends RecordReader<LongWritable, Text> {
             while(pos < end){
                 newSize = in.readLine(v, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
                 text.append(v.getBytes(), 0, v.getLength());
-                //text.append(endline.getBytes(),0, endline.getLength());
+                //
 
                 if(newSize == 0){
                     break;
@@ -89,6 +89,8 @@ public class JSONReader_rep extends RecordReader<LongWritable, Text> {
                 }
             }
         }
+
+        text.append(endline.getBytes(),0, endline.getLength());
 
         if(newSize == 0){
             key = null;
