@@ -54,9 +54,9 @@ public class SpatialJoin {
                 context.write(prk, text);
             }else{
                 String[] windows = window.split(",");
-                int width = Integer.parseInt(windows[2]) - Integer.parseInt(windows[0]);
-                int height = Integer.parseInt(windows[3]) - Integer.parseInt(windows[1]);
-                Rectangle rect = new Rectangle("Window"+","+ windows[0] + "," + windows[3] + "," + width  + "," + height);
+                float width = Float.parseFloat(windows[2]) - Float.parseFloat(windows[0]);
+                float height = Float.parseFloat(windows[3]) - Float.parseFloat(windows[1]);
+                Rectangle rect = new Rectangle("Window"+","+ windows[0] + "," + windows[3] + "," + width  + "," + height, 1);
 
                 if(rect.isInside(point)){
                     text.set(point.toString());

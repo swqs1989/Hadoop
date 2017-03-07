@@ -14,6 +14,12 @@ public class Point {
         calLocation(x_axis, y_axis);
     }
 
+    public Point(String input, int source){
+        StringTokenizer itr = new StringTokenizer(input, ",");
+        x_axis = Float.parseFloat(itr.nextToken());
+        y_axis = Float.parseFloat(itr.nextToken());
+    }
+
     private void calLocation(float x, float y){
         Float xn = new Float(x);
         Float yn = new Float(y);

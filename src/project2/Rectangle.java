@@ -14,10 +14,19 @@ public class Rectangle {
         name = itr.nextToken();
         x_axis = Float.parseFloat(itr.nextToken());
         y_axis = Float.parseFloat(itr.nextToken());
-        width = Integer.parseInt(itr.nextToken());
-        height = Integer.parseInt(itr.nextToken());
+        width = Float.parseFloat(itr.nextToken());
+        height = Float.parseFloat(itr.nextToken());
         area = new ArrayList<>();
         calArea();
+    }
+
+    public Rectangle(String input, int source){
+        StringTokenizer itr = new StringTokenizer(input, ",");
+        name = itr.nextToken();
+        x_axis = Float.parseFloat(itr.nextToken());
+        y_axis = Float.parseFloat(itr.nextToken());
+        width = Float.parseFloat(itr.nextToken());
+        height = Float.parseFloat(itr.nextToken());
     }
 
     private void calArea(){
@@ -59,8 +68,8 @@ public class Rectangle {
     private String name;
     private float x_axis;
     private float y_axis;
-    private int width;
-    private int height;
+    private float width;
+    private float height;
 
     public ArrayList<String> area;
 
@@ -88,7 +97,7 @@ public class Rectangle {
         this.y_axis = y_axis;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
@@ -96,7 +105,7 @@ public class Rectangle {
         this.width = width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

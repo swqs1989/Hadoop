@@ -1,12 +1,14 @@
 package project2;
 /**
  * Created by Youqiao Ma on 2/22/2017.
+ * check github function
  */
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -54,6 +56,13 @@ public class JSONJob {
             System.err.println("Count Flag among JSON File: <HDFS input file> <HDFS output file>");
             System.exit(2);
         }
+
+        FileSystem hdfs = FileSystem.get(conf);
+        Path path = new Path(args[0]);
+        long length = hdfs.getFileStatus(path).getLen();
+        hdfs.close();
+        conf.setLong("mapred.max.split.size", length / 5);
+
         Job job = new Job(conf, "JSON job");
         job.setJarByClass(JSONJob.class);
         job.setMapperClass(JSONMapper.class);

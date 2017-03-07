@@ -39,6 +39,9 @@ public class JSONReader_rep extends RecordReader<LongWritable, Text> {
 
     private final DataOutputBuffer buffer = new DataOutputBuffer();
 
+    private byte[] startTag = "{".getBytes();
+    private byte[] endTag = "}".getBytes();
+
     @Override
     public void initialize(InputSplit inputSplit, TaskAttemptContext context) throws IOException, InterruptedException {
         FileSplit split = (FileSplit) inputSplit;
@@ -58,46 +61,44 @@ public class JSONReader_rep extends RecordReader<LongWritable, Text> {
 
     @Override
     public boolean nextKeyValue() throws IOException, InterruptedException {
-        if(key == null){
-            key = new LongWritable();
-        }
-        key.set(pos);
-
-        if(text == null){
-            text = new Text();
-        }
-        text.clear();
-        final Text endline = new Text("\n");
-
-        int newSize = 0;
-
-        for (int i = 0; i < LINES_TO_READ; i++) {
-            Text v = new Text();
-            while(pos < end){
-                newSize = in.readLine(v, maxLineLength, Math.max((int) Math.min(Integer.MAX_VALUE, end - pos), maxLineLength));
-                text.append(v.getBytes(), 0, v.getLength());
-                //
-
-                if(newSize == 0){
-                    break;
-                }
-
-                pos += newSize;
-
-                if(newSize < maxLineLength){
-                    break;
+        if (fileIn.getPos() < end) {
+            if (isJSON(startTag, false)) {
+                try {
+                    buffer.write(startTag);
+                    if (isJSON(endTag, true)) {
+                        key.set(fileIn.getPos());
+                        text.set(buffer.getData(), 0,
+                                buffer.getLength());
+                        return true;
+                    }
+                } finally {
+                    buffer.reset();
                 }
             }
         }
+        return false;
+    }
 
-        text.append(endline.getBytes(),0, endline.getLength());
-
-        if(newSize == 0){
-            key = null;
-            text = null;
-            return false;
-        }else{
-            return true;
+    private boolean isJSON(byte[] match, boolean withinBlock) throws IOException {
+        int i = 0;
+        while (true) {
+            int b = fileIn.read();
+            // end of file:
+            if (b == -1)
+                return false;
+            // save to buffer:
+            if (withinBlock)
+                buffer.write(b);
+            // check if we're matching:
+            if (b == match[i]) {
+                i++;
+                if (i >= match.length)
+                    return true;
+            } else
+                i = 0;
+            // see if we've passed the stop point:
+            if (!withinBlock && i == 0 && fileIn.getPos() >= end)
+                return false;
         }
     }
 
