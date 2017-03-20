@@ -1,0 +1,40 @@
+>mkdir Output problem1 problem2 problem3
+
+Problem 1
+>javac Problem1WriteFile.java Util.java
+>java Problem1WriteFile
+
+>hadoop fs -copyFromLocal Output/Points project2/data/Points
+>hadoop fs -copyFromLocal Output/Rectangles project2/data/Rectangles
+
+>javac -classpath /usr/share/hadoop/hadoop-core-1.2.1.jar -d problem1 ./Point.java ./PRKey.java ./Rectangle.java ./SpatialJoin.java ./Util.java
+>jar -cvf ./problem1.jar -C problem1/ .
+-There are two ways to submit the job.
+-1. Submit without parameters of rectangle
+>hadoop jar ./problem1.jar SpatialJoin project2/data/Points project2/data/Rectangles project2/output/output1_1
+-2. Submit with parameters of rectangle "x1,y1,x2,y2", in which "x1,y1" stands for left-bottom point and "x2,y2" stands for right-top point.
+>hadoop jar ./problem1.jar SpatialJoin project2/data/Points project2/data/Rectangles project2/output/output1_2 10,10,5000,5000
+
+
+Problem 2
+-Upload the file "airfield.txt" to HDFS. Compile and execute java programs.
+>hadoop fs -copyFromLocal airfield.txt project2/data/airfield.txt
+
+>javac -classpath /usr/share/hadoop/hadoop-core-1.2.1.jar -d problem2 ./JSONFormat.java ./JSONFrame.java ./JSONJob.java ./JSONReader.java
+>jar -cvf ./problem2.jar -C problem2/ .
+>hadoop jar ./problem2.jar JSONJob project2/data/airfield.txt project2/output/output2
+
+Problem 3
+-There is only one file created by this java program. Since the initial points is randomly generated, it is designed to randomly generating inside the job.
+-compile and execute WritePoints and get the "Data" file containing random points with size of 100M.
+>javac WritePoints.java Util.java
+>java WritePoints
+
+>hadoop fs -copyFromLocal Output/Data project2/data/points
+
+>javac -classpath /usr/share/hadoop/hadoop-core-1.2.1.jar -d problem3 ./Util.java ./Point.java ./KMeansCluster.java
+>jar -cvf ./problem3.jar -C problem3/ .
+-K can be any integer greater than 2.
+>hadoop jar ./problem3.jar KMeansCluster K project2/data/points project2/output/output3
+-The output file should have such format, "x1,y1    x2,y2", "x1,y1" standing for last centroid, "x2,y2" standing for latest centroid.
+-The iteration will end either reaching 5 times or the difference between iterations less than 100.
